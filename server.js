@@ -155,6 +155,58 @@ function compactText(text, max = 1200) {
   return String(text).trim().slice(0, max);
 }
 
+function getNestedValue(obj, paths) {
+  for (const path of paths) {
+    const value = path.split(".").reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+    if (value !== undefined && value !== null && value !== "") {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+function extractResultFromWebhook(event) {
+  const candidateId = getNestedValue(event, [
+    "candidate_id",
+    "candidateId",
+    "data.candidate_id",
+    "data.candidateId",
+    "payload.candidate_id",
+    "payload.candidateId",
+    "result.candidate_id",
+    "result.candidateId",
+    "data.user_data.candidate_id",
+    "data.user_data.candidateId",
+    "user_data.candidate_id",
+    "user_data.candidateId"
+  ]);
+
+  const recommendation = getNestedValue(event, [
+    "recommendation",
+    "data.recommendation",
+    "payload.recommendation",
+    "result.recommendation"
+  ]);
+
+  const rawResult =
+    event?.data?.result ||
+    event?.result ||
+    event?.payload?.result ||
+    event?.data ||
+    event?.payload ||
+    event;
+
+  if (!candidateId || !recommendation) {
+    return null;
+  }
+
+  return {
+    ...rawResult,
+    candidate_id: rawResult.candidate_id || rawResult.candidateId || candidateId,
+    recommendation: rawResult.recommendation || recommendation
+  };
+}
+
 function normalizePhoneNumber(phone) {
   if (!phone) return "";
   const raw = String(phone).trim();
@@ -437,21 +489,34 @@ app.post("/api/screening/result", (req, res) => {
 app.post("/api/bolna/webhook", (req, res) => {
   const event = req.body || {};
 
-  // Accept webhook and store final result if sent by agent.
-  if (event.type === "screening_result" && event.data) {
+  const extractedResult = extractResultFromWebhook(event);
+  if (extractedResult) {
     const db = readResults();
     const result = {
       id: `result_${Date.now()}`,
       createdAt: new Date().toISOString(),
       source: "bolna_webhook",
-      ...event.data
+      ...extractedResult
     };
     const candidateId = result.candidate_id || result.candidateId;
     db.results = [result, ...db.results.filter((r) => (r.candidate_id || r.candidateId) !== candidateId)];
     writeResults(db);
+
+    const context = readContext();
+    const candidate = context.candidates.find((c) => c.id === candidateId);
+    if (candidate) {
+      candidate.status = "Screened";
+      writeContext(context);
+    }
+
+    return res.json({ ok: true, saved: true, candidateId });
   }
 
-  return res.json({ ok: true });
+  return res.json({
+    ok: true,
+    saved: false,
+    message: "Webhook received but no final screening payload detected. Ensure candidate_id and recommendation are sent."
+  });
 });
 
 app.get("/api/screening", (_req, res) => {
