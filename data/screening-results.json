@@ -1,0 +1,94 @@
+{
+  "results": [
+    {
+      "id": "result_seed_001",
+      "createdAt": "2026-03-08T09:30:00.000Z",
+      "candidate_id": "cand-101",
+      "candidate_name": "Priya Sharma",
+      "role": "Senior Frontend Engineer",
+      "experience_years": "6",
+      "tech_stack": ["React", "TypeScript", "Next.js"],
+      "project_summary": "Led a design system revamp that improved UI consistency.",
+      "notice_period_days": "30",
+      "current_ctc": "24 LPA",
+      "expected_ctc": "30 LPA",
+      "location_preference": "Bangalore",
+      "scores": {
+        "technical_fit": 85,
+        "project_depth": 80,
+        "communication": 88,
+        "logistics_fit": 75,
+        "overall": 82
+      },
+      "recommendation": "Proceed",
+      "strengths": [
+        "Strong React and TypeScript skills",
+        "Excellent communication",
+        "Good system design thinking"
+      ],
+      "concerns": [
+        "Limited backend experience",
+        "No prior leadership role"
+      ],
+      "notes": "Strong candidate for the next technical round."
+    },
+    {
+      "id": "result_seed_002",
+      "createdAt": "2026-03-08T09:35:00.000Z",
+      "candidate_id": "cand-102",
+      "candidate_name": "Rahul Verma",
+      "role": "Backend Developer",
+      "experience_years": "4",
+      "tech_stack": ["Node.js", "PostgreSQL"],
+      "project_summary": "Built and maintained high-throughput APIs.",
+      "notice_period_days": "45",
+      "current_ctc": "15 LPA",
+      "expected_ctc": "20 LPA",
+      "location_preference": "Mumbai",
+      "scores": {
+        "technical_fit": 68,
+        "project_depth": 61,
+        "communication": 62,
+        "logistics_fit": 65,
+        "overall": 64
+      },
+      "recommendation": "Hold",
+      "strengths": [
+        "Good API development background"
+      ],
+      "concerns": [
+        "Needs stronger system design depth"
+      ],
+      "notes": "Potential fit if second round validates depth."
+    },
+    {
+      "id": "result_seed_003",
+      "createdAt": "2026-03-08T09:40:00.000Z",
+      "candidate_id": "cand-103",
+      "candidate_name": "Ananya Patel",
+      "role": "Full Stack Developer",
+      "experience_years": "3",
+      "tech_stack": ["React", "Node.js"],
+      "project_summary": "Worked across UI and API modules.",
+      "notice_period_days": "60",
+      "current_ctc": "10 LPA",
+      "expected_ctc": "14 LPA",
+      "location_preference": "Hyderabad",
+      "scores": {
+        "technical_fit": 46,
+        "project_depth": 44,
+        "communication": 48,
+        "logistics_fit": 43,
+        "overall": 45
+      },
+      "recommendation": "Reject",
+      "strengths": [
+        "Collaborative communication"
+      ],
+      "concerns": [
+        "Insufficient depth for role seniority"
+      ],
+      "notes": "Not a match for current role level."
+    }
+  ]
+}
